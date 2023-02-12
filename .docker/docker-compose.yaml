@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6.0.2
+    container_name: mongo602
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_db:/data/db
+      - mongo_configdb:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: unless-stopped
+    networks:
+      - mongonet
+
+  mongo-express:
+    image: mongo-express:1.0.0-alpha.4
+    container_name: mongo-express100a4
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    restart: unless-stopped
+    networks:
+      - mongonet
+    depends_on:
+      - mongo
+
+networks:
+  mongonet:
+    driver: 'bridge'
+
+volumes:
+    mongo_db:
+      # external: true // Specify if you wish to create yourself
+    mongo_configdb:
+      # external: true // Specify if you wish to create yourself
