@@ -1,7 +1,7 @@
 package com.example.auth;
 
-import com.example.auth.auth.ProfileOwnership;
-import com.example.auth.auth.ProfileOwnershipRepository;
+import com.example.auth.auth.ProfileAcl;
+import com.example.auth.auth.ProfileAclRepository;
 import com.example.auth.auth.Role;
 import com.example.auth.auth.TeamToRole;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.List;
 @SpringBootApplication
 public class AuthApplication implements CommandLineRunner {
   @Autowired
-  ProfileOwnershipRepository profileOwnershipRepository;
+  ProfileAclRepository profileAclRepository;
 
   public static void main(String[] args) {
     SpringApplication.run(AuthApplication.class, args);
@@ -24,11 +24,11 @@ public class AuthApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    ProfileOwnership p = ProfileOwnership
+    ProfileAcl p = ProfileAcl
       .builder()
       .profileId(1L)
       .teamToRoleList(List.of(new TeamToRole("STARFRUIT", Role.R_CAREER)))
       .build();
-    profileOwnershipRepository.save(p);
+    profileAclRepository.save(p);
   }
 }

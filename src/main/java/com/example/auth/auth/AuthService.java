@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-  private final ProfileOwnershipRepository profileOwnershipRepository;
+  private final ProfileAclRepository profileAclRepository;
 
   public boolean hasPermissionToActOnResource(CustomUser customUser, Action action, Long profileId, Record resource) {
     Facet facet = resource.getFacetByRecord();
@@ -24,9 +24,9 @@ public class AuthService {
     String[] teamsArr = teams.toArray(new String[teams.size()]);
     Role[] rolesArr = permissibleRoles.toArray(new Role[permissibleRoles.size()]);
     log.info("profileId {}, teams {}, roles {}", profileId, teams, permissibleRoles);
-    List<ProfileOwnership> profileOwnerships = profileOwnershipRepository.getProfileOwnershipByProfileTeamsAndRole(profileId, teamsArr, rolesArr);
-    log.info("{}", profileOwnerships);
-    boolean hasPermission = profileOwnerships.size() > 0;
+    List<ProfileAcl> profileAcls = profileAclRepository.getProfileAclByProfileTeamsAndRole(profileId, teamsArr, rolesArr);
+    log.info("{}", profileAcls);
+    boolean hasPermission = profileAcls.size() > 0;
 
     return hasPermission;
 

@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 @Builder
-@TypeAlias("profileOwnership")
-@Document(collection = "profileOwnership")
-public class ProfileOwnership {
+@TypeAlias("profileAcl")
+@Document(collection = "profileAcl")
+public class ProfileAcl {
   Long profileId;
   List<TeamToRole> teamToRoleList;
 }
