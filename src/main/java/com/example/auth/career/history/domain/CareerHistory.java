@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @TypeAlias("careerHistory")
 @SuperBuilder(toBuilder = true)
-@Document(collection = "career")
+@Document(collection = "careerHistory")
 @NoArgsConstructor
 public class CareerHistory extends References {
   @MongoId

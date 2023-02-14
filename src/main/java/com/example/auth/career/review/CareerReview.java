@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Data
 @TypeAlias("careerReview")
 @Builder
-@Document(collection = "career")
+@Document(collection = "careerReview")
 public class CareerReview {
   @MongoId
   String id;

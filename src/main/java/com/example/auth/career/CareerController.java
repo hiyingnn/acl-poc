@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController()
+@RestController
 @RequestMapping("/api/v1/career")
 @RequiredArgsConstructor
 public class CareerController {
@@ -45,6 +45,11 @@ public class CareerController {
     return careerHistoryService.updateRecord(id, careerHistoryDTO);
   }
 
+  @DeleteMapping("profile/{profileId}/history/{id}")
+  public void deleteRecord(@PathVariable String id) {
+    careerHistoryService.deleteRecord(id);
+  }
+
   @GetMapping("review")
   public List<CareerReviewDTO> getAllReviewRecords() {
     return careerReviewService.getAllRecords();
@@ -64,6 +69,11 @@ public class CareerController {
   @PutMapping("profile/{profileId}/review/{id}")
   public CareerReviewDTO updateReviewRecord(@PathVariable String id, @RequestBody @Valid CareerReviewDTO careerReviewDTO, @PathVariable Long profileId) {
     return careerReviewService.updateRecord(id, careerReviewDTO);
+  }
+
+  @DeleteMapping("profile/{profileId}/review/{id}")
+  public void deleteReviewRecord(@PathVariable String id) {
+    careerReviewService.deleteRecord(id);
   }
 
 }

@@ -19,8 +19,8 @@ public class CareerReviewService {
   private final CareerReviewMapper careerReviewMapper;
 
   public CareerReviewDTO addRecord(CareerReviewDTO careerReviewDTO) {
-    CareerReview CareerReview = careerReviewMapper.toCareerGoal(careerReviewDTO);
-    CareerReview createdCareerReview = careerReviewRepository.save(CareerReview);
+    CareerReview careerReview = careerReviewMapper.toCareerGoal(careerReviewDTO);
+    CareerReview createdCareerReview = careerReviewRepository.save(careerReview);
 
     CareerReviewDTO createdCareerReviewDTO = careerReviewMapper.toCareerGoalDTO(createdCareerReview);
 
@@ -36,14 +36,14 @@ public class CareerReviewService {
   }
 
   public Optional<CareerReviewDTO> getRecordById(String id) {
-    Optional<CareerReview> CareerGoal = careerReviewRepository.findById(id);
-    return CareerGoal.map(careerReviewMapper::toCareerGoalDTO);
+    Optional<CareerReview> careerReview = careerReviewRepository.findById(id);
+    return careerReview.map(careerReviewMapper::toCareerGoalDTO);
   }
 
   public CareerReviewDTO updateRecord(String id, CareerReviewDTO newCareerReviewDTO) {
-    Optional<CareerReview> CareerGoal = careerReviewRepository.findById(id);
+    Optional<CareerReview> careerReview = careerReviewRepository.findById(id);
 
-    if (CareerGoal.isEmpty()) throw new IllegalArgumentException("Not found");
+    if (careerReview.isEmpty()) throw new IllegalArgumentException("Not found");
 
     CareerReview newCareerReview = careerReviewMapper.toCareerGoal(newCareerReviewDTO);
     CareerReview createdCareerReview = careerReviewRepository.save(newCareerReview);
@@ -52,6 +52,14 @@ public class CareerReviewService {
     CareerReviewDTO createdCareerReviewDTO = careerReviewMapper.toCareerGoalDTO(createdCareerReview);
 
     return createdCareerReviewDTO;
+  }
+
+  public void deleteRecord(String id) {
+    Optional<CareerReview> existingCareerReview = careerReviewRepository.findById(id);
+
+    if (existingCareerReview.isEmpty()) throw new IllegalArgumentException("Not found");
+
+    careerReviewRepository.deleteById(id);
   }
 
 

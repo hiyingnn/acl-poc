@@ -55,5 +55,13 @@ public class CareerHistoryService {
     return createdCareerHistoryDTO;
   }
 
+  public void deleteRecord(String id) {
+    Optional<CareerHistory> existingCareerHistory = careerHistoryRepository.findById(id);
+
+    if (existingCareerHistory.isEmpty()) throw new IllegalArgumentException("Not found");
+
+    careerHistoryRepository.deleteById(id);
+  }
+
 
 }
