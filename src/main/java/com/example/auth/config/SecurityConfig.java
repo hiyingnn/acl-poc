@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,49 +24,52 @@ import org.springframework.security.web.access.expression.WebExpressionAuthoriza
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
-  /**
-   * WebExpression Authorization Manager uses  DefaultHttpSecurityExpressionHandler as its SpEL expression handler,
-   * which is not aware of the application context. A way is to set the application context of the expression handler
-   *
-   * @param expression Spel Expression
-   * @return WebExpressionAuthorizationManager with set application context
-   */
-  
-  private WebExpressionAuthorizationManager webExpressionAuthorizationManager(String expression) {
-    final var expressionHandler = new DefaultHttpSecurityExpressionHandler();
-    expressionHandler.setApplicationContext(applicationContext);
-    final var authorizationManager = new WebExpressionAuthorizationManager(expression);
-    authorizationManager.setExpressionHandler(expressionHandler);
-    return authorizationManager;
-  }
+    /**
+     * WebExpression Authorization Manager uses  DefaultHttpSecurityExpressionHandler as its SpEL expression handler,
+     * which is not aware of the application context. A way is to set the application context of the expression handler
+     *
+     * @param expression Spel Expression
+     * @return WebExpressionAuthorizationManager with set application context
+     */
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    private WebExpressionAuthorizationManager webExpressionAuthorizationManager(String expression) {
+        final var expressionHandler = new DefaultHttpSecurityExpressionHandler();
+        expressionHandler.setApplicationContext(applicationContext);
+        final var authorizationManager = new WebExpressionAuthorizationManager(expression);
+        authorizationManager.setExpressionHandler(expressionHandler);
+        return authorizationManager;
+    }
 
-    http.csrf().disable()
-      .authorizeHttpRequests(auth ->
-        auth.requestMatchers("/api/v1/career/profile/{profileId}/history/{id}")
-          .access(webExpressionAuthorizationManager("@filterAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\")"))
-      )
-      .httpBasic();
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.csrf().disable()
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
+                                .access(webExpressionAuthorizationManager("@filterAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/career/profile/{profileId}/history/{id}")
+                                .access(webExpressionAuthorizationManager("@filterAuthorizationChecker.hasPermissionToActOnResource(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .anyRequest().permitAll()
+                )
+                .httpBasic();
 
 
-    return http.build();
-  }
+        return http.build();
+    }
 
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-    DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-    auth.setUserDetailsService(userDetailsService);
-    auth.setPasswordEncoder(passwordEncoder);
-    return auth;
-  }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userDetailsService);
+        auth.setPasswordEncoder(passwordEncoder);
+        return auth;
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return NoOpPasswordEncoder.getInstance();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
 }

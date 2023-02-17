@@ -1,5 +1,6 @@
 package com.example.auth.career.history.domain;
 
+import com.example.auth.auth.RecordOverwriteAcl;
 import com.example.auth.common.References;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
@@ -18,21 +20,27 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @Document(collection = "careerHistory")
 @NoArgsConstructor
-public class CareerHistory extends References {
-  @MongoId
-  String id;
+public class CareerHistory extends References implements RecordOverwrite {
+    @MongoId(FieldType.OBJECT_ID)
+    String id;
 
-  Long profileId;
-  Long careerId;
+    Long profileId;
+    Long careerId;
 
-  String company;
-  Appointment appointment;
-  String duration;
-  String lastDrawnSalary;
-  List<String> skills;
-  List<Certification> certs;
+    String company;
+    Appointment appointment;
+    String duration;
+    String lastDrawnSalary;
+    List<String> skills;
+    List<Certification> certs;
 
-  @Version
-  Long version;
+    @Version
+    Long version;
 
+    List<RecordOverwriteAcl> recordAcls;
+
+    @Override
+    public List<RecordOverwriteAcl> getRecordAcls() {
+        return recordAcls;
+    }
 }

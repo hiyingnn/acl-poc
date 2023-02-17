@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Annotate with @PreAuthorize in Controller/Service layer, and SpEL expression to invoke this method
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MethodSecurityAuthorizationService {
+public class PreAuthFacetAuthorizationService {
   private final ProfileAclRepository profileAclRepository;
 
   public boolean hasPermissionToActOnResource(CustomUser customUser, Action action, Long profileId, Record resource) {
@@ -26,9 +29,8 @@ public class MethodSecurityAuthorizationService {
     log.info("profileId {}, teams {}, roles {}", profileId, teams, permissibleRoles);
     List<ProfileAcl> profileAcls = profileAclRepository.getProfileAclByProfileTeamsAndRole(profileId, teamsArr, rolesArr);
     log.info("{}", profileAcls);
-    boolean hasPermission = profileAcls.size() > 0;
 
-    return hasPermission;
+    return profileAcls.size() > 0;
 
   }
 }

@@ -6,17 +6,27 @@ package com.example.auth.auth.taxonomy;
  * <p>
  * The naming convention is the FACET_COLLECTION
  */
-public enum Record implements RecordToFacetMapping {
-  CAREER_HISTORY {
-    @Override
-    public Facet getFacetByRecord() {
-      return Facet.CAREER;
+public enum Record implements RecordMapping {
+    CAREER_HISTORY {
+        @Override
+        public Facet getFacetByRecord() {
+            return Facet.CAREER;
+        }
+
+        @Override
+        public String getCollectionName() {
+            return "careerHistory";
+        }
+    },
+    CAREER_REVIEW {
+        @Override
+        public Facet getFacetByRecord() {
+            return Facet.CAREER;
+        }
+
+        @Override
+        public String getCollectionName() {
+            return "careerReview";
+        }
     }
-  },
-  CAREER_REVIEW {
-    @Override
-    public Facet getFacetByRecord() {
-      return Facet.CAREER;
-    }
-  }
 }

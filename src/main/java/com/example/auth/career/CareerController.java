@@ -8,6 +8,7 @@ import com.example.auth.career.review.CareerReviewDTO;
 import com.example.auth.career.review.CareerReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,60 +21,57 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CareerController {
 
-  private final CareerHistoryService careerHistoryService;
-  private final CareerReviewService careerReviewService;
+    private final CareerHistoryService careerHistoryService;
+    private final CareerReviewService careerReviewService;
 
-  @GetMapping("history")
-  public List<CareerHistoryDTO> getAllRecords() {
-    return careerHistoryService.getAllRecords();
-  }
+    @GetMapping("history")
+    public List<CareerHistoryDTO> getAllRecords() {
+        return careerHistoryService.getAllRecords();
+    }
 
-  @GetMapping("profile/{profileId}/history/{id}")
-  @PreAuthorize("@methodSecurityAuthorizationService.hasPermissionToActOnResource(#user, \"READ\", #profileId, \"CAREER_HISTORY\")")
-  public Optional<CareerHistoryDTO> getOneRecord(@AuthenticationPrincipal CustomUser user, @PathVariable Long profileId, @PathVariable String id) {
-    return careerHistoryService.getRecordById(id);
-  }
+    @GetMapping("profile/{profileId}/history/{id}")
+    public Optional<CareerHistoryDTO> getOneRecord(@AuthenticationPrincipal CustomUser user, @PathVariable Long profileId, @PathVariable String id) {
+        return careerHistoryService.getRecordById(id);
+    }
 
-  @PostMapping("profile/{profileId}/history")
-  @PreAuthorize("@methodSecurityAuthorizationService.hasPermissionToActOnResource(#user, \"WRITE\", #profileId, \"CAREER_HISTORY\")")
-  public CareerHistoryDTO addRecord(@AuthenticationPrincipal CustomUser user, @RequestBody @Valid CareerHistoryDTO careerHistoryDTO, @PathVariable Long profileId) {
-    return careerHistoryService.addRecord(careerHistoryDTO);
-  }
+    @PostMapping("profile/{profileId}/history")
+    public CareerHistoryDTO addRecord(@AuthenticationPrincipal CustomUser user, @RequestBody @Valid CareerHistoryDTO careerHistoryDTO, @PathVariable Long profileId) {
+        return careerHistoryService.addRecord(careerHistoryDTO);
+    }
 
-  @PutMapping("profile/{profileId}/history/{id}")
-  public CareerHistoryDTO updateRecord(@PathVariable String id, @RequestBody @Valid CareerHistoryDTO careerHistoryDTO, @PathVariable Long profileId) {
-    return careerHistoryService.updateRecord(id, careerHistoryDTO);
-  }
+    @PutMapping("profile/{profileId}/history/{id}")
+    public CareerHistoryDTO updateRecord(@PathVariable String id, @RequestBody @Valid CareerHistoryDTO careerHistoryDTO, @PathVariable Long profileId) {
+        return careerHistoryService.updateRecord(id, careerHistoryDTO);
+    }
 
-  @DeleteMapping("profile/{profileId}/history/{id}")
-  public void deleteRecord(@PathVariable String id) {
-    careerHistoryService.deleteRecord(id);
-  }
+    @DeleteMapping("profile/{profileId}/history/{id}")
+    public void deleteRecord(@PathVariable String id) {
+        careerHistoryService.deleteRecord(id);
+    }
 
-  @GetMapping("review")
-  public List<CareerReviewDTO> getAllReviewRecords() {
-    return careerReviewService.getAllRecords();
-  }
+    @GetMapping("review")
+    public List<CareerReviewDTO> getAllReviewRecords() {
+        return careerReviewService.getAllRecords();
+    }
 
-  @GetMapping("profile/{profileId}/review/{id}")
-  @PreAuthorize("'alice' == #user.teams")
-  public Optional<CareerReviewDTO> getOneReviewRecord(@AuthenticationPrincipal CustomUser user, @PathVariable Long profileId, @PathVariable String id) {
-    return careerReviewService.getRecordById(id);
-  }
+    @GetMapping("profile/{profileId}/review/{id}")
+    public Optional<CareerReviewDTO> getOneReviewRecord(@AuthenticationPrincipal CustomUser user, @PathVariable Long profileId, @PathVariable String id) {
+        return careerReviewService.getRecordById(id);
+    }
 
-  @PostMapping("profile/{profileId}/review")
-  public CareerReviewDTO addReviewRecord(@RequestBody @Valid CareerReviewDTO careerReviewDTO, @PathVariable Long profileId) {
-    return careerReviewService.addRecord(careerReviewDTO);
-  }
+    @PostMapping("profile/{profileId}/review")
+    public CareerReviewDTO addReviewRecord(@RequestBody @Valid CareerReviewDTO careerReviewDTO, @PathVariable Long profileId) {
+        return careerReviewService.addRecord(careerReviewDTO);
+    }
 
-  @PutMapping("profile/{profileId}/review/{id}")
-  public CareerReviewDTO updateReviewRecord(@PathVariable String id, @RequestBody @Valid CareerReviewDTO careerReviewDTO, @PathVariable Long profileId) {
-    return careerReviewService.updateRecord(id, careerReviewDTO);
-  }
+    @PutMapping("profile/{profileId}/review/{id}")
+    public CareerReviewDTO updateReviewRecord(@PathVariable String id, @RequestBody @Valid CareerReviewDTO careerReviewDTO, @PathVariable Long profileId) {
+        return careerReviewService.updateRecord(id, careerReviewDTO);
+    }
 
-  @DeleteMapping("profile/{profileId}/review/{id}")
-  public void deleteReviewRecord(@PathVariable String id) {
-    careerReviewService.deleteRecord(id);
-  }
+    @DeleteMapping("profile/{profileId}/review/{id}")
+    public void deleteReviewRecord(@PathVariable String id) {
+        careerReviewService.deleteRecord(id);
+    }
 
 }
