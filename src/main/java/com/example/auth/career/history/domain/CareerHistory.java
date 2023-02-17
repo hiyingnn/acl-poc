@@ -35,7 +35,4 @@ public class CareerHistory extends References {
   @Version
   Long version;
 
-  public static String getCollectionName() {
-    return null;
-  }
 }

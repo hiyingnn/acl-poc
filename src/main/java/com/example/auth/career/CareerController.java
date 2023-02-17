@@ -29,13 +29,13 @@ public class CareerController {
   }
 
   @GetMapping("profile/{profileId}/history/{id}")
-  @PreAuthorize("@authService.hasPermissionToActOnResource(#user, \"READ\", #profileId, \"CAREER_HISTORY\")")
+  @PreAuthorize("@methodSecurityAuthorizationService.hasPermissionToActOnResource(#user, \"READ\", #profileId, \"CAREER_HISTORY\")")
   public Optional<CareerHistoryDTO> getOneRecord(@AuthenticationPrincipal CustomUser user, @PathVariable Long profileId, @PathVariable String id) {
     return careerHistoryService.getRecordById(id);
   }
 
   @PostMapping("profile/{profileId}/history")
-  @PreAuthorize("@authService.hasPermissionToActOnResource(#user, \"WRITE\", #profileId, \"CAREER_HISTORY\")")
+  @PreAuthorize("@methodSecurityAuthorizationService.hasPermissionToActOnResource(#user, \"WRITE\", #profileId, \"CAREER_HISTORY\")")
   public CareerHistoryDTO addRecord(@AuthenticationPrincipal CustomUser user, @RequestBody @Valid CareerHistoryDTO careerHistoryDTO, @PathVariable Long profileId) {
     return careerHistoryService.addRecord(careerHistoryDTO);
   }

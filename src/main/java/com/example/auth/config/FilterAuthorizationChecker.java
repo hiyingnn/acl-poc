@@ -1,20 +1,24 @@
-package com.example.auth.auth;
+package com.example.auth.config;
 
+import com.example.auth.auth.*;
 import com.example.auth.auth.taxonomy.Facet;
 import com.example.auth.auth.taxonomy.Record;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
-public class AuthService {
+@Component
+@RequiredArgsConstructor
+public class FilterAuthorizationChecker {
   private final ProfileAclRepository profileAclRepository;
 
-  public boolean hasPermissionToActOnResource(CustomUser customUser, Action action, Long profileId, Record resource) {
+  public boolean hasPermissionToActOnResource(Authentication authentication, Action action, Long profileId, Record resource) {
+    CustomUser customUser = (CustomUser) authentication.getPrincipal();
+    log.info("In filter auth");
     Facet facet = resource.getFacetByRecord();
     Permission permission = facet.getPermissionByActionAndResource(action);
     List<Role> permissibleRoles = permission.getRolesByPermission();
