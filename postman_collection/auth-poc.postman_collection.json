@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "73c4dd94-9d79-43ac-ac26-426ed873b59b",
+		"name": "auth-poc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "career",
+			"item": [
+				{
+					"name": "history",
+					"item": [
+						{
+							"name": "GET all career",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "bob",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career/history",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"history"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT career",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "alice",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"profileId\": 1,\r\n    \"careerId\": 1,\r\n    \"company\": \"Michelin Star Restaurant - Junior\",\r\n    \"appointment\": {\r\n        \"position\": \"Big Boss\",\r\n        \"rank\": \"Professional A\",\r\n        \"references\": [\r\n            {\r\n                \"field\": \"position\",\r\n                \"content\": \"Big Boss\",\r\n                \"sources\": [\r\n                    {\r\n                        \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                        \"referenceType\": \"LINKED_IN\",\r\n                        \"comment\": \"Obtained via LinkedIn learning\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    },\r\n    \"duration\": \"4Y\",\r\n    \"lastDrawnSalary\": \"4K\",\r\n    \"skills\": [\r\n        \"Cooking\"\r\n    ],\r\n    \"id\": \"63d2a289a3cc533371d1547d\",\r\n    \"version\": 3,\r\n    \"certs\": [\r\n        {\r\n            \"name\": \"Swimming2\",\r\n            \"issuedBy\": \"Cooking School A\",\r\n            \"references\": [\r\n                {\r\n                    \"field\": \"issuedBy\",\r\n                    \"content\": \"Cooking School A\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"field\": \"name\",\r\n                    \"content\": \"Swimming2\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"REDDIT\",\r\n                            \"comment\": \"Obtained via reddit thread\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"Cooking3\",\r\n            \"issuedBy\": \"Cooking School B\",\r\n            \"references\": [\r\n                {\r\n                    \"field\": \"name\",\r\n                    \"content\": \"Cooking3\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"field\": \"issuedBy\",\r\n                    \"content\": \"Cooking School B\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"references\": [\r\n        {\r\n            \"field\": \"company\",\r\n            \"content\": \"Michelin Star Restaurant\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"field\": \"company\",\r\n            \"content\": \"Michelin Star Restaurant - Junior\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"field\": \"skills\",\r\n            \"content\": \"Cooking\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/history/63d2a289a3cc533371d1547d",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"history",
+										"63d2a289a3cc533371d1547d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST career",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "alice",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"profileId\": 1,\r\n    \"careerId\": 1,\r\n    \"company\": \"Michelin Star Restaurant - Junior\",\r\n    \"appointment\": {\r\n        \"position\": \"Big Boss\",\r\n        \"rank\": \"Professional A\",\r\n        \"references\": [\r\n            {\r\n                \"field\": \"position\",\r\n                \"content\": \"Big Boss\",\r\n                \"sources\": [\r\n                    {\r\n                        \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                        \"referenceType\": \"LINKED_IN\",\r\n                        \"comment\": \"Obtained via LinkedIn learning\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    },\r\n    \"duration\": \"1Y\",\r\n    \"lastDrawnSalary\": \"4K\",\r\n    \"skills\": [\r\n        \"Cooking\"\r\n    ],\r\n    \"certs\": [\r\n        {\r\n            \"name\": \"Slicing\",\r\n            \"issuedBy\": \"Cooking School A\",\r\n            \"references\": [\r\n                {\r\n                    \"field\": \"issuedBy\",\r\n                    \"content\": \"Cooking School A\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"field\": \"name\",\r\n                    \"content\": \"Slicing\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"Cooking\",\r\n            \"issuedBy\": \"Cooking School B\",\r\n            \"references\": [\r\n                {\r\n                    \"field\": \"name\",\r\n                    \"content\": \"Cooking\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"field\": \"issuedBy\",\r\n                    \"content\": \"Cooking School B\",\r\n                    \"sources\": [\r\n                        {\r\n                            \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                            \"referenceType\": \"LINKED_IN\",\r\n                            \"comment\": \"Obtained via LinkedIn learning\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"references\": [\r\n        {\r\n            \"field\": \"company\",\r\n            \"content\": \"Michelin Star Restaurant\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"field\": \"company\",\r\n            \"content\": \"Michelin Star Restaurant - Junior\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"field\": \"skills\",\r\n            \"content\": \"Cooking\",\r\n            \"sources\": [\r\n                {\r\n                    \"dateObtained\": \"2022-11-11T12:19:54.52\",\r\n                    \"referenceType\": \"LINKED_IN\",\r\n                    \"comment\": \"Obtained via LinkedIn learning\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/history",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"history"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET career by id",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "alice",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career/637b4a730d731e5ca50baac7",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"637b4a730d731e5ca50baac7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete career",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/history/637b4a730d731e5ca50baac7",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"history",
+										"637b4a730d731e5ca50baac7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "review",
+					"item": [
+						{
+							"name": "GET all career",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT career",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "alice",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"63e645b184cabb7919ea63f1\",\r\n    \"profileId\": 1,\r\n    \"careerId\": 1,\r\n    \"review\": \"Bad\",\r\n    \"version\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/review/63e645b184cabb7919ea63f1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"review",
+										"63e645b184cabb7919ea63f1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST career",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "bob",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n    \"profileId\": \"1\", \r\n    \"careerId\": \"1\",\r\n    \"review\": \"Horribble\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/review",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"review"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET career by id",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "alice",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/review/63ea3db08ffc3f235d1ed8d4",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"review",
+										"63ea3db08ffc3f235d1ed8d4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete career",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/career/profile/1/history/637b4a730d731e5ca50baac7",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"career",
+										"profile",
+										"1",
+										"history",
+										"637b4a730d731e5ca50baac7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "acl",
+			"item": [
+				{
+					"name": "GET all acl",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alice",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/acl",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"acl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT acl by profileId",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alice",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"63ea3b708ffc3f235d1ed8d2\",\n    \"teamToRoleList\": [\n        {\n            \"team\": \"STARFRUIT\",\n            \"role\": \"R_CAREER\"\n        }\n    ],\n    \"profileId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/acl/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"acl",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST acl by profileId",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alice",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"teamToRoleList\": [\n        {\n            \"team\": \"STARFRUIT\",\n            \"role\": \"RW_CAREER\"\n        }\n    ],\n    \"profileId\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/acl",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"acl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET by profileId",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alice",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/acl/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"acl",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE by profileId",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alice",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/acl/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"acl",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
