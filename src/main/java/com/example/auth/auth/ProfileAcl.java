@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Document(collection = "profileAcl")
 public class ProfileAcl {
 
-  @Id
+  @MongoId
   String id;
   List<TeamToRole> teamToRoleList;
 
