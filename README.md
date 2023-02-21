@@ -57,12 +57,12 @@
   "recordAcls": [
     {
       "user": "alice",
-      "effect": "GRANT",
+      "effect": "ALLOW",
       "permission": "R_CAREER"
     },
     {
       "user": "bob",
-      "effect": "REVOKE",
+      "effect": "DENY",
       "permission": "R_CAREER"
     }
   ]
@@ -91,36 +91,39 @@
 ## Some thoughts...
 1. Is there a way we can store both record and facet permissions in the same collection?
 - Greater alignment with role, permissions?
-```json
+``` json
 [
   {
-    "identifier": "PROFILE_ADMIN",
+    /** team based facet permissions**/
+    "identifier": "CAREER_ADMIN",
     "user_and_group": {
       "type": "team",
       "name": "APPLE"
     },
     "resource": {
-      "type": "facet",
-      "resourceId": "careerHistory"
+      "type": "role",
+      "resource: "CAREER_ADMIN" 
     },
     "profile": 1,
-    "resourceId": null,
+    "isPermissionsDerived": "true", // permission is derived by Role, may expand to ["R_CAREER", "W_CAREER"]
     "effect": "ALLOWED"
   },
-  {
-    "identifier": "",
+   {
+    /** user based record overwrite permissions**/
+    "identifier": "PROFILE",
     "user_and_group": {
-      "type": "user",
-      "name": "alice"
+      "type": "team",
+      "name": "APPLE"
     },
     "resource": {
-      "type": "record",
-      "resourceId": "careerHistory/1234"
+      "type": "role",
+      "resource: "CAREER_ADMIN" 
     },
     "profile": 1,
-    "resourceId": "1234",
-    "effect": "DENIED"
-  }
+    "isPermissionsDerived": "false",
+    "permissions": ["R_CAREER"],
+    "effect": "ALLOWED"
+  },
 ]
 ```
 2. Having better modelling will ensure that if we offload it to a policy engine, we can still query efficiently

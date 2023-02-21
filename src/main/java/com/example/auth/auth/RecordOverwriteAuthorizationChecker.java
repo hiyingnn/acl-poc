@@ -1,6 +1,5 @@
-package com.example.auth.config;
+package com.example.auth.auth;
 
-import com.example.auth.auth.*;
 import com.example.auth.auth.taxonomy.Record;
 import com.example.auth.career.history.domain.RecordOverwrite;
 import lombok.RequiredArgsConstructor;
@@ -44,12 +43,12 @@ public class RecordOverwriteAuthorizationChecker {
 
         if (recordOverwriteResult.isEmpty()) {
             return RecordOverwriteResult.NOT_OVERWRITTEN;
-        } else if (recordOverwriteResult.get().equals(Effect.GRANT)) {
-            return RecordOverwriteResult.GRANTED;
-        } else if (recordOverwriteResult.get().equals(Effect.REVOKE)) {
-            return RecordOverwriteResult.REVOKED;
+        } else if (recordOverwriteResult.get().equals(Effect.ALLOW)) {
+            return RecordOverwriteResult.ALLOWED;
+        } else if (recordOverwriteResult.get().equals(Effect.DENY)) {
+            return RecordOverwriteResult.DENIED;
         }
 
-        return RecordOverwriteResult.REVOKED;
+        return RecordOverwriteResult.DENIED;
     }
 }

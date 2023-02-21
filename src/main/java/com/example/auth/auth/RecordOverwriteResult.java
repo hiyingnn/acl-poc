@@ -1,7 +1,7 @@
 package com.example.auth.auth;
 
 public enum RecordOverwriteResult {
-    GRANTED,
-    REVOKED,
+    ALLOWED,
+    DENIED,
     NOT_OVERWRITTEN
 }

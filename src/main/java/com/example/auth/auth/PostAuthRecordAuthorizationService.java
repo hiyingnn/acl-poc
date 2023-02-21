@@ -22,6 +22,6 @@ public class PostAuthRecordAuthorizationService {
                         && recordAcl.getPermission().equals(permission)
         ).map(RecordOverwriteAcl::getEffect).findFirst();
 
-        return effect.isEmpty() || effect.get().equals(Effect.GRANT);
+        return effect.isEmpty() || effect.get().equals(Effect.ALLOW);
     }
 }

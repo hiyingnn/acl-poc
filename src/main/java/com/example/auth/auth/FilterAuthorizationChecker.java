@@ -1,6 +1,5 @@
-package com.example.auth.config;
+package com.example.auth.auth;
 
-import com.example.auth.auth.*;
 import com.example.auth.auth.taxonomy.Facet;
 import com.example.auth.auth.taxonomy.Record;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class FilterAuthorizationChecker {
         if (recordOverwriteResult.equals(RecordOverwriteResult.NOT_OVERWRITTEN)) {
             return isFacetGranted;
         } else {
-            return recordOverwriteResult.equals(RecordOverwriteResult.GRANTED);
+            return recordOverwriteResult.equals(RecordOverwriteResult.ALLOWED);
         }
     }
 }
