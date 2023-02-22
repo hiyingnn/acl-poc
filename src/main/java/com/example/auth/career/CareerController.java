@@ -1,15 +1,13 @@
 package com.example.auth.career;
 
 
-import com.example.auth.auth.CustomUser;
+import com.example.auth.authz.CustomUser;
 import com.example.auth.career.history.CareerHistoryService;
 import com.example.auth.career.history.dto.CareerHistoryDTO;
 import com.example.auth.career.review.CareerReviewDTO;
 import com.example.auth.career.review.CareerReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

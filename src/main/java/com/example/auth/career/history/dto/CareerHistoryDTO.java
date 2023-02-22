@@ -1,5 +1,6 @@
 package com.example.auth.career.history.dto;
 
+import com.example.auth.authz.authzv1.recordoverwrite.RecordOverwriteAclDto;
 import com.example.auth.common.ReferencesDTO;
 import com.example.auth.config.ValidReference;
 import jakarta.validation.Valid;
@@ -32,6 +33,9 @@ public class CareerHistoryDTO extends ReferencesDTO {
 
   List<@Valid CertificationToFieldDTO> certs;
   Long version;
+
+  List<RecordOverwriteAclDto> recordAcls;
+
 
   @Override
   public Set<String> getMandatoryReferences() {

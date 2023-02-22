@@ -1,6 +1,6 @@
 package com.example.auth.career.history.domain;
 
-import com.example.auth.auth.RecordOverwriteAcl;
+import com.example.auth.authz.authzv1.recordoverwrite.RecordOverwriteAcl;
 import com.example.auth.common.References;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

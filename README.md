@@ -2,6 +2,15 @@
 - Collection roles
 - Document permissions overwrite
 
+## Overview
+- v1 (Phase 1): Spring security via Method Security or Authz filter
+  - Facet permissions: profile-team-role mapping `ProfileAcl` collection
+  - Record permissions: embedded within document
+  - **Within `authzv1` package**
+- v2 (Phase 2): Rethinking a model where we can easily offload to policy engine
+  - Facet/Record permissions in the same collection
+  - **Within `authzv2` package**
+
 ## Users
 - Fixed users defined in: `CustomUserDetailsService`
 - Authorization type: Basic Auth, with password `password`
@@ -9,7 +18,7 @@
 | user  | teams             | 
 |-------|:------------------|
 | alice | APPLE, BANANA     | 
-| bob   | STARFRUIT, ORANGE | 
+| bob   | STARFRUIT, ORANGE |
 
 ## v1 Collection permissions
 ### Modelling 
@@ -88,45 +97,46 @@
   - Since fetch of record overwritten permissions is already fetched: Why not evaluate and short-circuit immediately if not authorized?
     
     
-## Some thoughts...
+## v2 facet+record permissions
 1. Is there a way we can store both record and facet permissions in the same collection?
 - Greater alignment with role, permissions?
+- Initial thoughts on modelling:
 ``` json
 [
   {
     /** team based facet permissions**/
     "identifier": "CAREER_ADMIN",
-    "user_and_group": {
-      "type": "team",
+    "userAndGroup": {
+      "type": "TEAM",
       "name": "APPLE"
     },
     "resource": {
-      "type": "role",
-      "resource: "CAREER_ADMIN" 
+      "type": "ROLE",
+      "resourceId": "CAREER_ADMIN" 
     },
     "profile": 1,
     "isPermissionsDerived": "true", // permission is derived by Role, may expand to ["R_CAREER", "W_CAREER"]
-    "effect": "ALLOWED"
+    "effect": "ALLOW"
   },
    {
     /** user based record overwrite permissions**/
     "identifier": "PROFILE",
-    "user_and_group": {
-      "type": "team",
-      "name": "APPLE"
+    "userAndGroup": {
+      "type": "USER",
+      "name": "alice"
     },
     "resource": {
-      "type": "role",
-      "resource: "CAREER_ADMIN" 
+      "type": "RECORD",
+      "resourceId": "careerHistory/1234" 
     },
     "profile": 1,
     "isPermissionsDerived": "false",
     "permissions": ["R_CAREER"],
-    "effect": "ALLOWED"
+    "effect": "ALLOW"
   },
 ]
 ```
-2. Having better modelling will ensure that if we offload it to a policy engine, we can still query efficiently
+- Having better modelling will ensure that if we offload it to a policy engine, we can still query efficiently
 
 ### Research on frameworks for offloading/auth service
 - Cerbos
