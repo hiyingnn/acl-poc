@@ -49,9 +49,9 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
-                                .access(webExpressionAuthorizationManager("@filterAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/career/profile/{profileId}/history/{id}")
-                                .access(webExpressionAuthorizationManager("@filterAuthorizationChecker.hasPermissionToActOnResource(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
                                 .anyRequest().permitAll()
                 )
                 .httpBasic();
