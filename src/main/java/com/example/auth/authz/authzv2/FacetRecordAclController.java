@@ -16,23 +16,23 @@ public class FacetRecordAclController {
   private final FacetRecordAclService facetRecordAclService;
 
   @GetMapping
-  public List<FacetRecordAcl> getAllRecords() {
+  public List<AccessControlList> getAllRecords() {
     return facetRecordAclService.getAllRecords();
   }
 
   @GetMapping("{id}")
-  public Optional<FacetRecordAcl> getOneRecord(@AuthenticationPrincipal CustomUser user, @PathVariable String id) {
+  public Optional<AccessControlList> getOneRecord(@AuthenticationPrincipal CustomUser user, @PathVariable String id) {
     return facetRecordAclService.getRecordByProfileId(id);
   }
 
   @PostMapping
-  public FacetRecordAcl addRecord(@AuthenticationPrincipal CustomUser user, @RequestBody @Valid FacetRecordAcl facetRecordAcl) {
-    return facetRecordAclService.addRecord(facetRecordAcl);
+  public AccessControlList addRecord(@AuthenticationPrincipal CustomUser user, @RequestBody @Valid RecordAcl recordAcl) {
+    return facetRecordAclService.addRecord(recordAcl);
   }
 
   @PutMapping("{id}")
-  public FacetRecordAcl updateRecord(@RequestBody @Valid FacetRecordAcl facetRecordAcl, @PathVariable String id) {
-    return facetRecordAclService.updateRecord(id, facetRecordAcl);
+  public AccessControlList updateRecord(@RequestBody @Valid AccessControlList recordAcl, @PathVariable String id) {
+    return facetRecordAclService.updateRecord(id, recordAcl);
   }
 
   @DeleteMapping("{id}")

@@ -1,10 +1,11 @@
 package com.example.auth.authz.authzv2;
 
+import com.example.auth.authz.role.Role;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
-@Data
 @SuperBuilder
-public abstract class Resource {
-  ResourceType type;
+@Data
+public class RoleResource extends Resource {
+  Role role;
 }

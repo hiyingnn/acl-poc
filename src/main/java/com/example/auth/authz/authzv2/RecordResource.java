@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-public abstract class Resource {
-  ResourceType type;
+public class RecordResource extends Resource {
+  String recordType;
+  String recordId;
 }
