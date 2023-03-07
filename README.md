@@ -287,7 +287,7 @@ is_permission_granted(permissions) if {
 ```
 
 ```aidl
-{{
+{
     "profileRoles": [
         {
             "identifier": "PROFILE_ROLE",

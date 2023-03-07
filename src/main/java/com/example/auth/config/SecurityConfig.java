@@ -46,16 +46,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+        // Spring security via WebExpressionAuth
+//        http.csrf().disable()
+//                .authorizeHttpRequests(auth ->
+//                        auth.requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
+//                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
+//                                .requestMatchers(HttpMethod.PUT, "/api/v1/career/profile/{profileId}/history/{id}")
+//                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
+//                                .anyRequest().permitAll()
+//                )
+//                .httpBasic();
+
+
+        // Externalising to OPA
         http.csrf().disable()
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
-                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .access(webExpressionAuthorizationManager("@opaService.allow(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/career/profile/{profileId}/history/{id}")
-                                .access(webExpressionAuthorizationManager("@facetRecordAuthorizationChecker.hasPermissionToActOnResource(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .access(webExpressionAuthorizationManager("@opaService.allow(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
                                 .anyRequest().permitAll()
                 )
                 .httpBasic();
-
 
         return http.build();
     }

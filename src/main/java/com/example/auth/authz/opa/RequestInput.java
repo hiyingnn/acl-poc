@@ -7,9 +7,8 @@ import java.util.List;
 
 public record RequestInput(String user,
                            List<String> teams,
-                           Permission permissionsRequired,
-                           String profileId,
-                           ResourceType resourceType,
+                           Permission permissionRequired,
+                           Long profileId,
                            String recordId
 ) {
 }

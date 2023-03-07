@@ -26,8 +26,6 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
   @Override
   public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
     log.error("authentication {}", authentication.get().getPrincipal());
-    var customUser = (CustomUser) authentication.get().getPrincipal();
-    var u = object.getRequest().getRequestURI();
 
 
     return new AuthorizationDecision(true);
