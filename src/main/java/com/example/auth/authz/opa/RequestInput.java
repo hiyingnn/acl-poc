@@ -9,6 +9,7 @@ public record RequestInput(String user,
                            List<String> teams,
                            Permission permissionRequired,
                            Long profileId,
-                           String recordId
+                           String recordId,
+                           DataInput data
 ) {
 }

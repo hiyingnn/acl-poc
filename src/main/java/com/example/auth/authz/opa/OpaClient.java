@@ -18,7 +18,7 @@ public class OpaClient {
   }
 
   public boolean isAllowed(OpaRequest opaRequest) {
-    ResponseEntity<OpaResponse> response = restTemplate.postForEntity("/v1/data/authz/allow", opaRequest, OpaResponse.class );
+    ResponseEntity<OpaResult> response = restTemplate.postForEntity("/v1/data/single", opaRequest, OpaResult.class );
 
     if(!response.hasBody()) {
       return false;
@@ -26,6 +26,6 @@ public class OpaClient {
 
     log.info(String.valueOf(response.getBody()));
 
-    return response.getBody().allow();
+    return response.getBody().result().allow();
   }
 }

@@ -1,7 +1,7 @@
 # first- filter is OPA:
 # Facet + Record filter on fetch single resource
 
-package app.rbac
+package single
 
 import future.keywords.contains
 import future.keywords.if
@@ -20,31 +20,31 @@ role_to_permissions := {"CAREER_ADMIN": ["R_CAREER", "W_CAREER"], "CAREER_VIEWER
 
 # Expand profile role to permissions
 profile_role_permissions = [user_permissions_effect |
-    user_group := data.profileRoles[i].userAndGroup
-    role := data.profileRoles[i].resource.role
+    user_group := input.data.profileRoles[i].userAndGroup
+    role := input.data.profileRoles[i].resource.role
     permissions := role_to_permissions[role]
     user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
     user_permissions_effect := object.union(user_permissions, {"effect": "ALLOW"})
 
 	is_user_group(user_group)
-	data.profileRoles[i].resource.type == "ROLE"
+	input.data.profileRoles[i].resource.type == "ROLE"
     is_permission_granted(permissions)
 
 ]
 
 # Record permissions
 record_permissions = [user_permissions_effect |
-    user_group := data.recordPermissions[i].userAndGroup
-    permissions := data.recordPermissions[i].permissions
-    effect := data.recordPermissions[i].effect
-    record_id := data.recordPermissions[i].resource.recordId
+    user_group := input.data.recordPermissions[i].userAndGroup
+    permissions := input.data.recordPermissions[i].permissions
+    effect := input.data.recordPermissions[i].effect
+    record_id := input.data.recordPermissions[i].resource.recordId
 
     user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
     user_permissions_effect := object.union(user_permissions, {"effect": effect})
 
 	is_user_group(user_group)
     is_record(record_id)
-	data.recordPermissions[i].resource.type == "RECORD"
+	input.data.recordPermissions[i].resource.type == "RECORD"
     is_permission_granted(permissions)
 ]
 
@@ -90,5 +90,5 @@ is_record(record_id) if {
 }
 
 is_permission_granted(permissions) if {
-	input.permission_required in permissions
+	input.permissionRequired in permissions
 }

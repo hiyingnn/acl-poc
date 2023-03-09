@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleResource extends Resource {
-  Role role;
+  ProfileRole role;
 }

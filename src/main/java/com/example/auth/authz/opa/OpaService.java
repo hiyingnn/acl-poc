@@ -31,9 +31,9 @@ public class OpaService {
     Permission permissionRequired = facet.getPermissionByActionAndResource(action);
     DataInput dataInput = new DataInput(profileRoleAcls, recordAcls);
 
-    RequestInput requestInput = new RequestInput(user.getUsername(), user.getTeams(),  permissionRequired, profileId, recordId);
 
-    return opaClient.isAllowed(new OpaRequest(dataInput, requestInput));
+    RequestInput requestInput = new RequestInput(user.getUsername(), user.getTeams(),  permissionRequired, profileId, recordId, dataInput);
 
+    return opaClient.isAllowed(new OpaRequest( requestInput));
   }
 }
