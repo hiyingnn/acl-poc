@@ -1,0 +1,16 @@
+{
+    "query": "data.multiple.allow == true",
+    "input": {
+        "user": "alice",
+        "teams": [
+            "APPLE",
+            "STARFRUIT"
+        ],
+        "permissionRequired": "R_CAREER",
+        "profileId": 1
+    },
+    "unknowns": [
+        "data.recordPermissions", "data.profileRoles"
+    ]
+   
+}

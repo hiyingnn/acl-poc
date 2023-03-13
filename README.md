@@ -172,340 +172,73 @@
 - Slack RBAC -> granular permissions article
 - TOADD
 
-## Resource on single resource
+### Externalising with OPA
+- Using docker to run OPA server 
+- Docker image: `openpolicyagent/opa`
 
-```rego
-# first- filter is OPA:
-# Facet + Record filter on fetch single resource
+#### Initial set-up
+- More information found in: https://www.openpolicyagent.org/docs/latest/deployments/#running-with-docker
 
-package app.rbac
-
-import future.keywords.contains
-import future.keywords.if
-import future.keywords.in
-
-# By default, deny requests.
-default allow := false
-
-# # role-permissions assignments: defined here first (may be part of data)
-# permissions_to_action := {
-# 	"R_CAREER": {"action": "read",  "object": "careerHistory"},
-#     "W_CAREER": {"action": "write",  "object": "careerHistory"}
-# }
-
-role_to_permissions := {"CAREER_ADMIN": ["R_CAREER", "W_CAREER"], "CAREER_VIEWER": ["R_CAREER"]}
-
-# Expand profile role to permissions
-profile_role_permissions = [user_permissions_effect |
-    user_group := data.profileRoles[i].userAndGroup
-    role := data.profileRoles[i].resource.role
-    permissions := role_to_permissions[role]
-    user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
-    user_permissions_effect := object.union(user_permissions, {"effect": "ALLOW"})
-
-	is_user_group(user_group)
-	data.profileRoles[i].resource.type == "ROLE"
-    is_permission_granted(permissions)
-
-]
-
-# Record permissions
-record_permissions = [user_permissions_effect |
-    user_group := data.recordPermissions[i].userAndGroup
-    permissions := data.recordPermissions[i].permissions
-    effect := data.recordPermissions[i].effect
-    record_id := data.recordPermissions[i].resource.recordId
-
-    user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
-    user_permissions_effect := object.union(user_permissions, {"effect": effect})
-
-	is_user_group(user_group)
-    is_record(record_id)
-	data.recordPermissions[i].resource.type == "RECORD"
-    is_permission_granted(permissions)
-]
-
-# Facet permission: 1, Record permission: 0 (REVOKE) -> 0
-# Facet permission: 0, Record permission: 1 (GRANTED) -> 1
-# Facet permission: 1, Record permission: - (MISSING) -> 1
-# Facet permission: 0, Record permission: - (MISSING) -> 0
-allow := true if {
- 	count(record_permissions) > 0
-    effect_allowed(record_permissions)
-    not effect_revoked(record_permissions)
-}
-
-allow := true if  {
-	count(record_permissions) = 0
-    effect_allowed(profile_role_permissions)
-    not effect_revoked(profile_role_permissions)
-
-}
-
-effect_allowed(permissions) if {
-	some permission in permissions
-    permission.effect == "ALLOW"
-}
-
-effect_revoked(permissions) if {
-	some permission in permissions
-    permission.effect == "DENY"
-}
-
-is_user_group(user_and_group) if {
-    user_and_group.type == "TEAM"
-    user_and_group.name in input.teams
-}
-
-is_user_group(user_and_group) if {
-    user_and_group.type == "USER"
-    user_and_group.name == input.user
-}
-
-is_record(record_id) if {
-    record_id == input.recordId
-}
-
-is_permission_granted(permissions) if {
-	input.permission_required in permissions
-}
-
+1. Run OPA
+```
+-- run server
+docker run -p 8181:8181 openpolicyagent/opa \
+    run --server --log-level debug
+    
+-- check if OPA is available 
+curl -i localhost:8181/
 ```
 
-```aidl
-{
-    "user": "alice",
-    "teams": [
-        "APPLE",
-        "STARFRUIT"
-    ],
-    "permission_required": "R_CAREER",
-    "profileId": 1,
-    "resourceType": "record",
-    "recordId": "12345"
+2. Add Policy via Policy API
+``` 
+-- Create new policy
+curl -X PUT --data-binary \@single.rego localhost:8181/v1/policies/single
+
+-- Check policy created
+curl localhost:8181/v1/policies/single?pretty=true
+
+-- Test policy evaluatin
+curl -X POST localhost:8181/v1/data/single?pretty=true -d @v1-data-input.json -H 'Content-Type: application/json'
+```
+
+3. In app policy evaluation via Data API 
+``` java
+@Service
+@Slf4j
+public class OpaClient {
+  private final RestTemplate restTemplate;
+
+  public OpaClient(RestTemplateBuilder restTemplateBuilder) {
+    this.restTemplate = restTemplateBuilder
+            .rootUri("http://localhost:8181")
+            .build();
+  }
+
+  public boolean isAllowed(OpaRequest opaRequest) {
+    ResponseEntity<OpaResult> response = restTemplate.postForEntity("/v1/data/single", opaRequest, OpaResult.class );
+
+    if(!response.hasBody()) {
+      return false;
+    }
+
+    log.info(String.valueOf(response.getBody()));
+
+    return response.getBody().result().allow();
+  }
 }
 ```
 
-```aidl
-{
-    "profileRoles": [
-        {
-            "identifier": "PROFILE_ROLE",
-            "userAndGroup": {
-                "type": "TEAM",
-                "name": "APPLE"
-            },
-            "resource": {
-                "type": "ROLE",
-                "role": "CAREER_ADMIN"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "true",
-            "effect": "ALLOW"
-        },
-        {
-            "identifier": "PROFILE_ROLE",
-            "userAndGroup": {
-                "type": "USER",
-                "name": "alice"
-            },
-            "resource": {
-                "type": "ROLE",
-                "resourceId": "CAREER_ADMIN"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "true",
-            "effect": "ALLOW"
-        }
-    ],
-    "recordPermissions": [
-        {
-            "identifier": "RECORD_PERMISSIONS",
-            "userAndGroup": {
-                "type": "USER",
-                "name": "alice"
-            },
-            "resource": {
-                "type": "RECORD",
-                "objectType": "careerHistory",
-                "recordId": "1234"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "false",
-            "permissions": [
-                "W_CAREER"
-            ],
-            "effect": "DENY"
-        }
-    ]
-}
-```
+### Stretch: Multiple resources
+#### (1): OPA Partial evaluation and custom repository that extends `MongoRepository`
+- Inspiration: https://blog.openpolicyagent.org/write-policy-in-opa-enforce-policy-in-sql-d9d24db93bf4
+- Some downsides by using this library
+  - Not actively managed
+  - Tight coupling with mongo (MQL) and opa (Rego) languages
+- WIP: Problems integrating with library
+  - `MongoRepository` Bean can be configured via `EnableMongoRepository`
+  - Unable to instantiate Repository beans that use base `MongoRepository` interface  
 
-## Resource on multiple resource (short-circuit approach)
 
-```rego
-# first- filter is OPA:
-# Facet + Record filter on fetch single resource
-
-package app.rbac
-
-import future.keywords.contains
-import future.keywords.if
-import future.keywords.in
-
-# By default, deny requests.
-default allow := false
-
-# # role-permissions assignments: defined here first (may be part of data)
-# permissions_to_action := {
-# 	"R_CAREER": {"action": "read",  "object": "careerHistory"},
-#     "W_CAREER": {"action": "write",  "object": "careerHistory"}
-# }
-
-role_to_permissions := {"CAREER_ADMIN": ["R_CAREER", "W_CAREER"], "CAREER_VIEWER": ["R_CAREER"]}
-
-# Expand profile role to permissions
-profile_role_permissions = [user_permissions_effect |
-    user_group := data.profileRoles[i].userAndGroup
-    role := data.profileRoles[i].resource.role
-    permissions := role_to_permissions[role]
-    user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
-    user_permissions_effect := object.union(user_permissions, {"effect": "ALLOW"})
-
-	is_user_group(user_group)
-	data.profileRoles[i].resource.type == "ROLE"
-    is_permission_granted(permissions)
-
-]
-
-# Record permissions
-record_permissions = [user_permissions_effect |
-    user_group := data.recordPermissions[i].userAndGroup
-    permissions := data.recordPermissions[i].permissions
-    effect := data.recordPermissions[i].effect
-    record_id := data.recordPermissions[i].resource.recordId
-
-    user_permissions := object.union({"user_group": user_group}, {"permissions": permissions})
-    user_permissions_effect := object.union(user_permissions, {"effect": effect})
-
-	is_user_group(user_group)
-    is_record(record_id)
-	data.recordPermissions[i].resource.type == "RECORD"
-    is_permission_granted(permissions)
-]
-
-# Facet permission: 1, Record permission: 0 (REVOKE) -> 0
-# Facet permission: 0, Record permission: 1 (GRANTED) -> 1
-# Facet permission: 1, Record permission: - (MISSING) -> 1
-# Facet permission: 0, Record permission: - (MISSING) -> 0
-allow := true if {
- 	count(record_permissions) > 0
-    effect_allowed(record_permissions)
-    not effect_revoked(record_permissions)
-}
-
-allow := true if  {
-	count(record_permissions) = 0
-    effect_allowed(profile_role_permissions)
-    not effect_revoked(profile_role_permissions)
-
-}
-
-effect_allowed(permissions) if {
-	some permission in permissions
-    permission.effect == "ALLOW"
-}
-
-effect_revoked(permissions) if {
-	some permission in permissions
-    permission.effect == "DENY"
-}
-
-is_user_group(user_and_group) if {
-    user_and_group.type == "TEAM"
-    user_and_group.name in input.teams
-}
-
-is_user_group(user_and_group) if {
-    user_and_group.type == "USER"
-    user_and_group.name == input.user
-}
-
-is_record(record_id) if {
-    record_id == input.recordId
-}
-
-is_permission_granted(permissions) if {
-	input.permission_required in permissions
-}
-
-```
-
-```aidl
-{
-    "user": "alice",
-    "teams": [
-        "APPLE",
-        "STARFRUIT"
-    ],
-    "permission_required": "R_CAREER",
-    "profileId": 1,
-    "resourceType": "record",
-    "recordId": "12345"
-}
-```
-
-```aidl
-{{
-    "profileRoles": [
-        {
-            "identifier": "PROFILE_ROLE",
-            "userAndGroup": {
-                "type": "TEAM",
-                "name": "APPLE"
-            },
-            "resource": {
-                "type": "ROLE",
-                "role": "CAREER_ADMIN"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "true",
-            "effect": "ALLOW"
-        },
-        {
-            "identifier": "PROFILE_ROLE",
-            "userAndGroup": {
-                "type": "USER",
-                "name": "alice"
-            },
-            "resource": {
-                "type": "ROLE",
-                "resourceId": "CAREER_ADMIN"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "true",
-            "effect": "ALLOW"
-        }
-    ],
-    "recordPermissions": [
-        {
-            "identifier": "RECORD_PERMISSIONS",
-            "userAndGroup": {
-                "type": "USER",
-                "name": "alice"
-            },
-            "resource": {
-                "type": "RECORD",
-                "objectType": "careerHistory",
-                "recordId": "1234"
-            },
-            "profile": 1,
-            "isPermissionsDerived": "false",
-            "permissions": [
-                "W_CAREER"
-            ],
-            "effect": "DENY"
-        }
-    ]
-}
-```
+####  (2) AOP which intercepts findAll(predicate, pageable), queries Repository
+- Assume that already passed the short-circuit evaluation:
+  - Means that there already exists a record that has "overwritten" record permissions

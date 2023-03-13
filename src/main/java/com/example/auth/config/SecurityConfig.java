@@ -61,10 +61,12 @@ public class SecurityConfig {
         // Externalising to OPA
         http.csrf().disable()
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
+                        auth.requestMatchers(
+                                HttpMethod.GET, "/api/v1/career/profile/{profileId}/history/{id}")
                                 .access(webExpressionAuthorizationManager("@opaService.allow(authentication, \"READ\", #profileId, \"CAREER_HISTORY\", #id)"))
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/career/profile/{profileId}/history/{id}")
                                 .access(webExpressionAuthorizationManager("@opaService.allow(authentication, \"WRITE\", #profileId, \"CAREER_HISTORY\", #id)"))
+                                .requestMatchers(HttpMethod.GET, "/api/v1/career/profile/{profileId}/history").access(webExpressionAuthorizationManager("@opaService.allow(authentication, \"READ\", #profileId, \"CAREER_HISTORY\")"))
                                 .anyRequest().permitAll()
                 )
                 .httpBasic();

@@ -22,7 +22,7 @@ public class CareerController {
     private final CareerHistoryService careerHistoryService;
     private final CareerReviewService careerReviewService;
 
-    @GetMapping("history")
+    @GetMapping("profile/{profileId}/history")
     public List<CareerHistoryDTO> getAllRecords() {
         return careerHistoryService.getAllRecords();
     }
