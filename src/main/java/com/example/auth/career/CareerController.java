@@ -3,11 +3,16 @@ package com.example.auth.career;
 
 import com.example.auth.authz.CustomUser;
 import com.example.auth.career.history.CareerHistoryService;
+import com.example.auth.career.history.domain.CareerHistory;
 import com.example.auth.career.history.dto.CareerHistoryDTO;
 import com.example.auth.career.review.CareerReviewDTO;
 import com.example.auth.career.review.CareerReviewService;
+import com.querydsl.core.types.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +28,8 @@ public class CareerController {
     private final CareerReviewService careerReviewService;
 
     @GetMapping("profile/{profileId}/history")
-    public List<CareerHistoryDTO> getAllRecords() {
-        return careerHistoryService.getAllRecords();
+    public Page<CareerHistoryDTO> getAllRecordsPaginated(@PathVariable Long profileId, @QuerydslPredicate(root = CareerHistory.class) Predicate predicate, Pageable pageable) {
+        return careerHistoryService.getAllRecords(profileId, predicate, pageable);
     }
 
     @GetMapping("profile/{profileId}/history/{id}")

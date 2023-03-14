@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAndGroup {
-    enum UserAndGroupType{
-        TEAM,
-        USER
-    };
+
     UserAndGroupType type;
     String name;
 }

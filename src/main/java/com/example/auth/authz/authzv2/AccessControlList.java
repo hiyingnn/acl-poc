@@ -4,6 +4,7 @@ import com.example.auth.authz.role.Effect;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public abstract class AccessControlList {
   @MongoId
   String id;

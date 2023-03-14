@@ -162,17 +162,7 @@
 
 - Having better modelling will ensure that if we offload it to a policy engine, we can still query efficiently
 
-### Research on frameworks for offloading/auth service
-
-- Cerbos
-- Zanzibar (open-source: permify, etc)
-
-### Useful resources
-
-- Slack RBAC -> granular permissions article
-- TOADD
-
-### Externalising with OPA
+## Phase 2 Externalising with OPA
 - Using docker to run OPA server 
 - Docker image: `openpolicyagent/opa`
 
@@ -229,6 +219,7 @@ public class OpaClient {
 ```
 
 ### Stretch: Multiple resources
+- Not a high priority since the **Record Overwrite permissions is not high priority**
 #### (1): OPA Partial evaluation and custom repository that extends `MongoRepository`
 - Inspiration: https://blog.openpolicyagent.org/write-policy-in-opa-enforce-policy-in-sql-d9d24db93bf4
 - Some downsides by using this library
@@ -242,3 +233,17 @@ public class OpaClient {
 ####  (2) AOP which intercepts findAll(predicate, pageable), queries Repository
 - Assume that already passed the short-circuit evaluation:
   - Means that there already exists a record that has "overwritten" record permissions
+- `AuthAspect` as a simple PoC that this can be done. however, only covers a subset of the scenarios:
+  1. PROFILE_ROLE granted, record overwrite ALLOWED 
+  2. PROFILE_ROLE granted, record overwrite DENIED 
+  3. PROFILE_ROLE not granted, record overwrite ALLOWED 
+  4. PROFILE_ROLE not granted, record overwrite DENIED - no need to eval
+- Enhancements possible:
+  - A way to handle this generically
+  - (Action, permission) by class method?
+  - return `joinPoint.proceed` response?
+
+#### (3) Spring Data mongo
+- Custom Repository implementation (https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries) - similar to (1) 
+- Event Callbacks https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.mapping-usage.events 
+  - `AfterLoad`? - may need to do some manipulation before get authz

@@ -4,6 +4,7 @@ import com.example.auth.authz.role.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +17,7 @@ import java.util.List;
 @Document(collection = "facetRecordAcl")
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true)
 public class RecordAcl extends AccessControlList {
   RecordResource resource;
   List<Permission> permissions;

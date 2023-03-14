@@ -52,7 +52,7 @@ public class FacetRecordAuthorizationChecker {
         acl.getResource().getType().equals(ResourceType.RECORD)
           && acl.getResource().getRecordId().equals(recordResourceId) &&
           acl.getPermissions().contains(permission) &&
-          (acl.getUserAndGroup().equals(new UserAndGroup(UserAndGroup.UserAndGroupType.USER, user.getUsername()))
+          (acl.getUserAndGroup().equals(new UserAndGroup(UserAndGroupType.USER, user.getUsername()))
             || teams.contains(acl.getUserAndGroup().getName()) // team needs stricter check
           )
 

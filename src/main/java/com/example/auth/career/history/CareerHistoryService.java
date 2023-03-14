@@ -1,13 +1,17 @@
 package com.example.auth.career.history;
 
 import com.example.auth.career.history.domain.CareerHistory;
+import com.example.auth.career.history.domain.QCareerHistory;
 import com.example.auth.career.history.dto.CareerHistoryDTO;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -28,12 +32,17 @@ public class CareerHistoryService {
     return createdCareerHistoryDTO;
   }
 
-  public List<CareerHistoryDTO> getAllRecords() {
-    return careerHistoryRepository
-      .findAll()
-      .stream()
-      .map(careerHistoryMapper::toCareerHistoryDTO)
-      .toList();
+  public Page<CareerHistoryDTO> getAllRecords(Long profileId, Predicate predicate, Pageable pageable) {
+    var composedPredicate = ExpressionUtils.allOf(predicate, QCareerHistory.careerHistory.profileId.eq(profileId));
+    Page<CareerHistory> careerHistories = careerHistoryRepository.findAll(composedPredicate, pageable);
+    log.info(careerHistories.toString());
+    return careerHistories.map(careerHistoryMapper::toCareerHistoryDTO);
+  }
+
+  public Page<CareerHistoryDTO> getAllRecords(  Pageable pageable) {
+    Page<CareerHistory> careerHistories = careerHistoryRepository.findAll( pageable);
+
+    return careerHistories.map(careerHistoryMapper::toCareerHistoryDTO);
   }
 
   public Optional<CareerHistoryDTO> getRecordById(String id) {
