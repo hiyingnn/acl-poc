@@ -246,4 +246,4 @@ public class OpaClient {
 #### (3) Spring Data mongo
 - Custom Repository implementation (https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries) - similar to (1) 
 - Event Callbacks https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.mapping-usage.events 
-  - `AfterLoad`? - may need to do some manipulation before get authz
+  - `AfterLoad` event/ `AfterConvert`? - may need to do some type casting/reflection before can evaluate authz - less straightforward
